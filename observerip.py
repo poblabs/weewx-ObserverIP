@@ -57,7 +57,7 @@ class observerip(weewx.drivers.AbstractDevice):
 	def genLoopPackets(self):
 
 		while True:				
-			# Screen scrape the ObserverIP to get sensor readings. Some help from:
+			# Screen scrape the ObserverIP to get sensor readings.
 			try:
 				page = requests.get(self.station_url)
 			except Exception as e:
@@ -66,9 +66,11 @@ class observerip(weewx.drivers.AbstractDevice):
 				pass # Continue without exiting
 
 			tree = html.fromstring(page.content)
-
+			
+			# Can weewx take these values?
 			#inBattery = tree.xpath('//input[@name="inBattSta"]')[0].value
 			#outBattery = tree.xpath('//input[@name="outBattSta1"]')[0].value
+			#uvi = tree.xpath('//input[@name="uvi"]')[0].value
 			inTemp = tree.xpath('//input[@name="inTemp"]')[0].value
 			inHumid = tree.xpath('//input[@name="inHumi"]')[0].value
 			outTemp = tree.xpath('//input[@name="outTemp"]')[0].value
@@ -80,8 +82,6 @@ class observerip(weewx.drivers.AbstractDevice):
 			windGust = tree.xpath('//input[@name="gustspeed"]')[0].value
 			solarRadiation = tree.xpath('//input[@name="solarrad"]')[0].value
 			uv = tree.xpath('//input[@name="uv"]')[0].value
-			#uvi = tree.xpath('//input[@name="uvi"]')[0].value
-
 			rainHourly = tree.xpath('//input[@name="rainofhourly"]')[0].value
 			
 			# Build the packet data
