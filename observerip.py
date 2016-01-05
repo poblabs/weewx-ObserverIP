@@ -113,7 +113,4 @@ class observerip(weewx.drivers.AbstractDevice):
 			
 			# Sleep time
 			#syslog.syslog("Sleeping for %s" % self.loop_interval)
-			start_time = time.time()
-			sleep_time = (start_time - time.time()) + self.loop_interval
-			if sleep_time > 0:
-				  time.sleep(sleep_time)
+			time.sleep(self.loop_interval)
