@@ -63,7 +63,7 @@ class observerip(weewx.drivers.AbstractDevice):
 			except Exception as e:
 				syslog.syslog("ObserverIP driver couldn't access the livedata.htm webpage.")
 				syslog.syslog("Error caught was: %s" % e)
-				pass # Continue without exiting
+				pass # Continue without exiting. TODO: Better error handling and error sleeping
 
 			tree = html.fromstring(page.content)
 			
@@ -109,7 +109,7 @@ class observerip(weewx.drivers.AbstractDevice):
 			except Exception as e:
 				syslog.syslog("ObserverIP driver had an error yielding data packet to weewx. The ObserverIP unit may have been rebooting. Will follow sleep routine and try again.")
 				syslog.syslog("Error caught was: %s" % e)
-				#pass # Continue without exiting
+				pass # Continue without exiting. TODO: Better error handling and error sleeping
 			
 			# Sleep time
 			#syslog.syslog("Sleeping for %s" % self.loop_interval)
