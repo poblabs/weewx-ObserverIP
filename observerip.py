@@ -87,7 +87,6 @@ class observerip(weewx.drivers.AbstractDevice):
 			# Build the packet data
 			try:
 				_packet = { 
-					#'dateTime': int(time.time() + 0.5),
 					#'outTempBatteryStatus' : str(outBattery),
 					#'inTempBatteryStatus' : str(inBattery),
 					'dateTime' : self.get_station_time(),
