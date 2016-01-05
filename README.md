@@ -7,6 +7,7 @@ This driver relies on you setting a static IP for your ObserverIP.
 You can configure the loop time, and the IP of the device. 
 
 ## Install
+- You'll need to have the Python requests library installed (It can be installed from command line. For example: `pip install requests`)
 - Copy the driver observerip.py to the weewx driver folder. For my CentOS install it's located at `/usr/share/weewx/weewx/drivers`
 - Copy the text in the `weewx.conf` here to your `weewx.conf`
 - Modify the configuration in `weewx.conf` to update the IP and hardware description
