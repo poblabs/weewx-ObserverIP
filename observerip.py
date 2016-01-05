@@ -4,6 +4,7 @@
 """weewx Driver for the Ambient Weather ObserverIP
 
 	Pat O'Brien
+	https://github.com/poblabs/weewx-ObserverIP
 	Changelog: v1.0
 		December 28, 2015
 		Initial attempt
