@@ -17,6 +17,8 @@ You can configure the loop time, and the IP of the device.
 
 ### Warranty
 
-There is none. It's a bit buggy right now. The driver may cause your weewx to crash if the device is rebooted, or otherwise slowed down (the ObserverIP is not a very strong device). 
+There is none. It's a bit buggy right now. The driver may cause your weewx to crash if the ObserverIP is rebooted, or otherwise slowed down (the ObserverIP is not a very strong device).
+
+If weewx crashes, that means your data is not being logged. 
 
 I'm open to pull requests to make this better!
