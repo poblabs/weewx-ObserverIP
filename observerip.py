@@ -23,10 +23,10 @@ import weewx.wxformulas
 
 def loader(config_dict, engine):
 
-	station = observerip(**config_dict['observerip'])
+	station = ObserverIP(**config_dict['ObserverIP'])
 	return station
 		
-class observerip(weewx.drivers.AbstractDevice):
+class ObserverIP(weewx.drivers.AbstractDevice):
 	"""Custom driver for Ambient Weather ObserverIP. Mostly based off Simulator """
 	
 	def __init__(self, **stn_dict):
@@ -37,19 +37,13 @@ class observerip(weewx.drivers.AbstractDevice):
 		
 		self.station_hardware = stn_dict.get('hardware')
 		
-	def get_station_time(self):
-		page = requests.get(self.station_url)
-		tree = html.fromstring(page.content)
-
-		stationTime = tree.xpath('//input[@name="CurrTime"]')[0].value
-		pattern = '%H:%M %m/%d/%Y'
-		station_time_epoch = int(time.mktime(time.strptime(stationTime, pattern)))
-		return station_time_epoch
-
 	def getTime(self):
-		# Get the station time.
-		#return time.time()
-		return self.get_station_time()
+		# The ObserverIP doesn't do seconds, so using the time from the ObserverIP
+		# with a loop packet of every 15 seconds is useless. All measurements will be archived
+		# from the same minute, even though they are different within the same minute. 
+		# This method uses mwall's method from his fork of ObserverIP
+		epoch = int(time.time() + 0.5 )
+		return epoch
 	
 	def hardware_name(self):
 		return self.station_hardware
@@ -89,7 +83,7 @@ class observerip(weewx.drivers.AbstractDevice):
 				_packet = { 
 					#'outTempBatteryStatus' : str(outBattery),
 					#'inTempBatteryStatus' : str(inBattery),
-					'dateTime' : self.get_station_time(),
+					'dateTime' : self.getTime(),
 					'usUnits' : weewx.US,
 					'outTemp' : float(outTemp),
 					'outHumidity' : float(outHumid),
