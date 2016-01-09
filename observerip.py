@@ -1,13 +1,10 @@
 # $Id: pobwx.py 2766 2014-12-02 02:45:36Z tkeffer $
 # Copyright (c) 2012 Tom Keffer <tkeffer@gmail.com>
 # See the file LICENSE.txt for your full rights.
-"""weewx Driver for the Ambient Weather ObserverIP
+""" weewx Driver for the Ambient Weather ObserverIP
 
 	Pat O'Brien
 	https://github.com/poblabs/weewx-ObserverIP
-	Changelog: v1.0
-		December 28, 2015
-		Initial attempt
 	
 """
 
@@ -20,9 +17,7 @@ import weewx.drivers
 import weeutil.weeutil
 import weewx.wxformulas
 
-
 def loader(config_dict, engine):
-
 	station = ObserverIP(**config_dict['ObserverIP'])
 	return station
 		
@@ -40,13 +35,19 @@ class ObserverIP(weewx.drivers.AbstractDevice):
 	def getTime(self):
 		# The ObserverIP doesn't do seconds, so using the time from the ObserverIP
 		# with a loop packet of every 15 seconds is useless. All measurements will be archived
-		# from the same minute, even though they are different within the same minute. 
+		# from the same minute timestamp, even though the values could be different within the same minute. 
 		# This method uses mwall's method from his fork of ObserverIP
 		epoch = int(time.time() + 0.5 )
 		return epoch
 	
 	def hardware_name(self):
 		return self.station_hardware
+		
+	def get_battery_status(self, data):
+		if (data == "Normal"):
+			return 0
+		else:
+			return 1
 
 	def genLoopPackets(self):
 
@@ -61,10 +62,10 @@ class ObserverIP(weewx.drivers.AbstractDevice):
 
 			tree = html.fromstring(page.content)
 			
-			# Can weewx take these values?
-			#inBattery = tree.xpath('//input[@name="inBattSta"]')[0].value
-			#outBattery = tree.xpath('//input[@name="outBattSta1"]')[0].value
+			# Can weewx take this value?
 			#uvi = tree.xpath('//input[@name="uvi"]')[0].value
+			inBattery = tree.xpath('//input[@name="inBattSta"]')[0].value
+			outBattery = tree.xpath('//input[@name="outBattSta1"]')[0].value
 			inTemp = tree.xpath('//input[@name="inTemp"]')[0].value
 			inHumid = tree.xpath('//input[@name="inHumi"]')[0].value
 			outTemp = tree.xpath('//input[@name="outTemp"]')[0].value
@@ -81,8 +82,6 @@ class ObserverIP(weewx.drivers.AbstractDevice):
 			# Build the packet data
 			try:
 				_packet = { 
-					#'outTempBatteryStatus' : str(outBattery),
-					#'inTempBatteryStatus' : str(inBattery),
 					'dateTime' : self.getTime(),
 					'usUnits' : weewx.US,
 					'outTemp' : float(outTemp),
@@ -96,12 +95,14 @@ class ObserverIP(weewx.drivers.AbstractDevice):
 					'windSpeed' : float(windSpeed),
 					'windGust' : float(windGust),
 					'radiation' : float(solarRadiation),
-					'UV' : float(uv)
+					'UV' : float(uv),
+					'outTempBatteryStatus' : self.get_battery_status(outBattery),
+					'inTempBatteryStatus' : self.get_battery_status(inBattery)
 				}
 
 				yield _packet
 			except Exception as e:
-				syslog.syslog("ObserverIP driver had an error yielding data packet to weewx. The ObserverIP unit may have been rebooting. Will follow sleep routine and try again.")
+				syslog.syslog("ObserverIP driver had an error yielding data packet to weewx.")
 				syslog.syslog("Error caught was: %s" % e)
 				pass # Continue without exiting. TODO: Better error handling and error sleeping
 			
