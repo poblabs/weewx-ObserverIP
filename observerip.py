@@ -90,7 +90,6 @@ class ObserverIP(weewx.drivers.AbstractDevice):
 			windGust = tree.xpath('//input[@name="gustspeed"]')[0].value
 			solarRadiation = tree.xpath('//input[@name="solarrad"]')[0].value
 			uv = tree.xpath('//input[@name="uv"]')[0].value
-			rainHourlyRate = tree.xpath('//input[@name="rainofhourly"]')[0].value
 			dailyRainAccum = tree.xpath('//input[@name="rainofdaily"]')[0].value
 				
 			# Build the packet data
@@ -105,7 +104,6 @@ class ObserverIP(weewx.drivers.AbstractDevice):
 					'pressure' : float(relPressure),
 					'barometer' : float(absPressure),
 					'rain': self.check_rain(dailyRainAccum),
-					'rainRate': float(rainHourlyRate),
 					'windDir' : float(windDir),
 					'windSpeed' : float(windSpeed),
 					'windGust' : float(windGust),
