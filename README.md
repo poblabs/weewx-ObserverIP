@@ -13,10 +13,10 @@ You can configure the loop time, and the IP of the device from weewx.conf.
 - Modify the configuration in `weewx.conf` to update the IP and hardware description
 - Restart weewx
 
-### Version
+## Version
 1.0 - Initial
 
-### Warranty
+## Warranty
 
 There is no warranty that this will work. Admittedly, it's a bit buggy right now. The driver may cause weewx to crash if the ObserverIP is rebooted, or otherwise slowed down (the ObserverIP is not a very strong device). If weewx crashes, then no data is being captured, which means your data is not being logged and you're not updating any weather services. 
 
