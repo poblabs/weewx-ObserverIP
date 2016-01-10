@@ -32,6 +32,8 @@ class ObserverIP(weewx.drivers.AbstractDevice):
 		
 		self.station_hardware = stn_dict.get('hardware')
 		
+		self.lastrain = None
+		
 	def getTime(self):
 		# The ObserverIP doesn't do seconds, so using the time from the ObserverIP
 		# with a loop packet of every 15 seconds is useless. All measurements will be archived
@@ -48,6 +50,17 @@ class ObserverIP(weewx.drivers.AbstractDevice):
 			return 0
 		else:
 			return 1
+			
+	def check_rain(self, data):
+		# Handle the rain accum by taking the Daily Rain reading and only submitting the increments
+		rain = 0.0
+		current_rain = float(data)
+		if self.lastrain is not None:
+			if (current_rain >= self.lastrain):
+				#print "Checking for new rain accumulation"
+				rain = float(current_rain) - float(self.lastrain)
+		self.lastrain = current_rain
+		return rain
 
 	def genLoopPackets(self):
 
@@ -77,8 +90,9 @@ class ObserverIP(weewx.drivers.AbstractDevice):
 			windGust = tree.xpath('//input[@name="gustspeed"]')[0].value
 			solarRadiation = tree.xpath('//input[@name="solarrad"]')[0].value
 			uv = tree.xpath('//input[@name="uv"]')[0].value
-			rainHourly = tree.xpath('//input[@name="rainofhourly"]')[0].value
-			
+			rainHourlyRate = tree.xpath('//input[@name="rainofhourly"]')[0].value
+			dailyRainAccum = tree.xpath('//input[@name="rainofdaily"]')[0].value
+				
 			# Build the packet data
 			try:
 				_packet = { 
@@ -90,7 +104,8 @@ class ObserverIP(weewx.drivers.AbstractDevice):
 					'inHumidity' : float(inHumid),
 					'pressure' : float(relPressure),
 					'barometer' : float(absPressure),
-					'rain': float(rainHourly),
+					'rain': self.check_rain(dailyRainAccum),
+					'rainRate': float(rainHourlyRate),
 					'windDir' : float(windDir),
 					'windSpeed' : float(windSpeed),
 					'windGust' : float(windGust),
