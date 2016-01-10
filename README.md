@@ -1,10 +1,10 @@
 # weewx ObserverIP driver
 
-This is an ObserverIP driver for the weewx platform. Since the Ambient Weather WS-1200-IP and WS-1400-IP don't offer a way to update any weather services other than Weather Underground, this driver simply grabs the values from the ObserverIP's tiny website and then sends the values to weewx. 
+This is my take on an ObserverIP driver for the weewx platform. There are a couple of other ones out there, too. Since the Ambient Weather WS-1200-IP and WS-1400-IP don't offer a way to update any weather services other than Weather Underground, this driver simply grabs the values from the ObserverIP's tiny website and then sends the values to weewx. Once weewx has the data, then you can have weewx update CWOP, PWSWeather, WeatherBug and more. 
 
 This driver relies on you setting a static IP for your ObserverIP. 
 
-You can configure the loop time, and the IP of the device. 
+You can configure the loop time, and the IP of the device from weewx.conf.
 
 ## Install
 - You'll need to have the Python requests library installed (It can be installed from command line. For example: `pip install requests`)
@@ -18,8 +18,6 @@ You can configure the loop time, and the IP of the device.
 
 ### Warranty
 
-There is none. It's a bit buggy right now. The driver may cause your weewx to crash if the ObserverIP is rebooted, or otherwise slowed down (the ObserverIP is not a very strong device).
-
-If weewx crashes, that means your data is not being logged. 
+There is no warranty that this will work. Admittedly, it's a bit buggy right now. The driver may cause weewx to crash if the ObserverIP is rebooted, or otherwise slowed down (the ObserverIP is not a very strong device). If weewx crashes, then no data is being captured, which means your data is not being logged and you're not updating any weather services. 
 
 I'm open to pull requests to make this better!
