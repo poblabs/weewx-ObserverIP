@@ -68,29 +68,29 @@ class ObserverIP(weewx.drivers.AbstractDevice):
 			# Screen scrape the ObserverIP to get sensor readings.
 			try:
 				page = requests.get(self.station_url)
+				tree = html.fromstring(page.content)
+				
+				# Can weewx take this value?
+				#uvi = tree.xpath('//input[@name="uvi"]')[0].value
+				inBattery = tree.xpath('//input[@name="inBattSta"]')[0].value
+				outBattery = tree.xpath('//input[@name="outBattSta1"]')[0].value
+				inTemp = tree.xpath('//input[@name="inTemp"]')[0].value
+				inHumid = tree.xpath('//input[@name="inHumi"]')[0].value
+				outTemp = tree.xpath('//input[@name="outTemp"]')[0].value
+				outHumid = tree.xpath('//input[@name="outHumi"]')[0].value
+				absPressure = tree.xpath('//input[@name="AbsPress"]')[0].value
+				relPressure = tree.xpath('//input[@name="RelPress"]')[0].value
+				windDir = tree.xpath('//input[@name="windir"]')[0].value
+				windSpeed = tree.xpath('//input[@name="avgwind"]')[0].value
+				windGust = tree.xpath('//input[@name="gustspeed"]')[0].value
+				solarRadiation = tree.xpath('//input[@name="solarrad"]')[0].value
+				uv = tree.xpath('//input[@name="uv"]')[0].value
+				dailyRainAccum = tree.xpath('//input[@name="rainofdaily"]')[0].value
+
 			except Exception as e:
 				syslog.syslog("ObserverIP driver couldn't access the livedata.htm webpage.")
 				syslog.syslog("Error caught was: %s" % e)
 				pass # Continue without exiting. TODO: Better error handling and error sleeping
-
-			tree = html.fromstring(page.content)
-			
-			# Can weewx take this value?
-			#uvi = tree.xpath('//input[@name="uvi"]')[0].value
-			inBattery = tree.xpath('//input[@name="inBattSta"]')[0].value
-			outBattery = tree.xpath('//input[@name="outBattSta1"]')[0].value
-			inTemp = tree.xpath('//input[@name="inTemp"]')[0].value
-			inHumid = tree.xpath('//input[@name="inHumi"]')[0].value
-			outTemp = tree.xpath('//input[@name="outTemp"]')[0].value
-			outHumid = tree.xpath('//input[@name="outHumi"]')[0].value
-			absPressure = tree.xpath('//input[@name="AbsPress"]')[0].value
-			relPressure = tree.xpath('//input[@name="RelPress"]')[0].value
-			windDir = tree.xpath('//input[@name="windir"]')[0].value
-			windSpeed = tree.xpath('//input[@name="avgwind"]')[0].value
-			windGust = tree.xpath('//input[@name="gustspeed"]')[0].value
-			solarRadiation = tree.xpath('//input[@name="solarrad"]')[0].value
-			uv = tree.xpath('//input[@name="uv"]')[0].value
-			dailyRainAccum = tree.xpath('//input[@name="rainofdaily"]')[0].value
 				
 			# Build the packet data
 			try:
