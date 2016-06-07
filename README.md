@@ -14,9 +14,13 @@ You can configure the loop time, and the IP of the device from weewx.conf.
 - Restart weewx
 
 ## Important Notice
-During my testing of a LOOP interval at 15 seconds, I've seen that the screen scraping of the ObserverIP has caused it to lock up, **sometimes up to 45 minutes at a time**. The lockup periods were typically only once per day. I believe this is happening because the ObserverIP is not a powerful device, so access it every 15 seconds overloads the tiny device. You could set your LOOP interval to 30 or 60 seconds and may have better results. 
+During my testing of a LOOP interval at 15 seconds, I've seen that the **screen scraping of the ObserverIP has caused it to lock up, sometimes up to 45 minutes at a time**. The lockup periods were typically only once per day. I believe this is happening because the ObserverIP is not a powerful device, so access it every 15 seconds overloads the tiny device. You could set your LOOP interval to 30 or 60 seconds and may have better results. 
 
-**I've decided to move away from the screen scraping method** and instead I am using a more (slightly advanced) way of getting data off the ObserverIP. For more details on the project with a detailed write up, check it out here: https://github.com/poblabs/weewx-socketlogger
+**I've decided to move away from the screen scraping method** and instead I am using a more (slightly advanced) way of getting data off the ObserverIP using a socket server and WeeWX listens on that socket for data. For more details on the project with a detailed write up, check it out here:
+
+Writeup of the new method: http://obrienlabs.net/redirecting-weather-station-data-from-observerip/
+
+Driver for the new method: https://github.com/poblabs/weewx-socketlogger
 
 ## Version
 1.0 - Initial
