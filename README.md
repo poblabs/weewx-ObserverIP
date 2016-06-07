@@ -6,13 +6,6 @@ This driver relies on you setting a static IP for your ObserverIP.
 
 You can configure the loop time, and the IP of the device from weewx.conf.
 
-## Install
-- You'll need to have the Python requests library installed (It can be installed from command line. For example: `pip install requests`)
-- Copy the observerip.py driver to the `bin/user` folder (For my CentOS install it's located at `/usr/share/weewx/user`)
-- Copy the text snippets from the `weewx.conf` here to your `weewx.conf`
-- Modify the configuration in `weewx.conf` to update the IP and hardware description
-- Restart weewx
-
 ## Important Notice
 During my testing of a LOOP interval at 15 seconds, I've seen that the **screen scraping of the ObserverIP has caused it to lock up, sometimes up to 45 minutes at a time**. The lockup periods were typically only once per day. I believe this is happening because the ObserverIP is not a powerful device, so access it every 15 seconds overloads the tiny device. You could set your LOOP interval to 30 or 60 seconds and may have better results. 
 
@@ -22,11 +15,21 @@ Writeup of the new method: http://obrienlabs.net/redirecting-weather-station-dat
 
 Driver for the new method: https://github.com/poblabs/weewx-socketlogger
 
+## Install
+- You'll need to have the Python requests library installed (It can be installed from command line. For example: `pip install requests`)
+- Copy the observerip.py driver to the `bin/user` folder (For my CentOS install it's located at `/usr/share/weewx/user`)
+- Copy the text snippets from the `weewx.conf` here to your `weewx.conf`
+- Modify the configuration in `weewx.conf` to update the IP and hardware description
+- Restart weewx
+
 ## Version
 1.0 - Initial
 
 ## Warranty
 
-There is no warranty that this will work. Admittedly, it's a bit buggy right now. The driver may cause your ObserverIP to lock up. It may also cause weewx to crash if the ObserverIP is rebooted, or otherwise slowed down (the ObserverIP is not a very strong device). If weewx crashes, then no data is being captured, which means your data is not being logged and you're not updating any weather services. 
+There is no warranty that this will work. Admittedly, it's a bit buggy right now. The driver may cause your ObserverIP to lock up. It may also cause weewx to crash if the ObserverIP is rebooted, or otherwise slowed down (the ObserverIP is not a very strong device). If weewx crashes, then no data is being captured, which means your data is not being logged and you're not updating any weather services.
 
-I'm open to pull requests to make this better!
+I would suggest the socket method outlined above. It's a little more work, but much more reliable than screen scraping. 
+
+If you see a bug, or a way to make this better, send a pull request!
+
