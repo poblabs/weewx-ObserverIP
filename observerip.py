@@ -17,6 +17,9 @@ import weewx.drivers
 import weeutil.weeutil
 import weewx.wxformulas
 
+DRIVER_NAME = 'ObserverIP'
+DRIVER_VERSION = '1.0'
+
 def loader(config_dict, engine):
 	station = ObserverIP(**config_dict['ObserverIP'])
 	return station
